@@ -1,0 +1,35 @@
+stages:
+  - build
+  - test
+  - deploy
+
+before_script:
+  - docker info
+
+build:
+  stage: build
+  tags:
+    - test1
+  script:
+    - docker build -t my-flask-app .
+    - docker tag my-flask-app my-flask-app:latest
+
+test:
+  stage: test
+  tags:
+    - test1
+  script:
+    - docker run --rm my-flask-app python -m unittest discover
+
+deploy:
+  stage: deploy
+  tags:
+    - test1
+  script:
+    - echo "Deploying application..."
+    - docker save my-flask-app:latest -o my-flask-app.tar
+    - scp -o StrictHostKeyChecking=no my-flask-app.tar m@192.168.64.20:/home/m/
+    - ssh -o StrictHostKeyChecking=no m@192.168.64.20 "docker load -i /home/m/my-flask-app.tar"
+    - ssh -o StrictHostKeyChecking=no m@192.168.64.20 "kubectl apply -f /home/m/deployment.yaml"
+    - ssh -o StrictHostKeyChecking=no m@192.168.64.20 "kubectl expose deployment my-flask-app --type=NodePort --port=5000 --target-port=5000"
+    - ssh -o StrictHostKeyChecking=no m@192.168.64.20 "minikube service my-flask-app --url"
