@@ -53,7 +53,7 @@ jobs:
 
       - name: Set up Kubeconfig
         run: |
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > /tmp/kubeconfig
+          echo "${{ secrets.KUBECONFIG }}" > /tmp/kubeconfig
         env:
           KUBECONFIG: /tmp/kubeconfig
           
@@ -61,7 +61,6 @@ jobs:
         env:
           KUBECONFIG: /tmp/kubeconfig  
         run: |
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > /tmp/kubeconfig
           docker load -i my-flask-app.tar
           kubectl apply -f /home/m/deployment.yaml
           kubectl expose deployment my-flask-app --type=NodePort --port=5000 --target-port=5000
