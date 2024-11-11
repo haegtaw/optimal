@@ -50,9 +50,9 @@ jobs:
     steps:
       - name: Deploy to Kubernetes
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # KUBECONFIG как секрет
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  
         run: |
-          # Загружаем Docker-образ в кластер и деплоим
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > /tmp/kubeconfig
           docker load -i my-flask-app.tar
           kubectl apply -f /home/m/deployment.yaml
           kubectl expose deployment my-flask-app --type=NodePort --port=5000 --target-port=5000
