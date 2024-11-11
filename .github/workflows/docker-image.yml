@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted  # Используем собственный раннер
+    runs-on: self-hosted  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,6 +20,12 @@ jobs:
           docker build -t my-flask-app .
           docker tag my-flask-app my-flask-app:latest
           docker save my-flask-app:latest -o my-flask-app.tar
+          
+      - name: Upload Docker Image as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-flask-app  
+          path: my-flask-app.tar 
 
   test:
     runs-on: self-hosted
