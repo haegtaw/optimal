@@ -61,6 +61,8 @@ jobs:
         env:
           KUBECONFIG: /tmp/kubeconfig  
         run: |
+          docker images
+          eval $(minikube docker-env)
           kubectl apply -f /home/m/deployment.yaml
           kubectl expose deployment my-flask-app --type=NodePort --port=5000 --target-port=5000
           kubectl rollout status deployment/my-flask-app
