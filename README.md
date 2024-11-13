@@ -41,6 +41,6 @@ https://github.com/haegtaw/optimal/actions/runs/11786069696
 
 АПД. для сервиса манифест не писала, просто применила 
 
-`kubectl expose deployment tryingflask --type=NodePort --port=6000`
+`kubectl expose deployment tryingflask --type=NodePort --port=5000`
 
 И не делала пвц, потому что при перезапуске пода хранила бы только метрики, вроде ни к чему (было б в задании - сделала бы)
